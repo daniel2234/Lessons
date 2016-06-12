@@ -13,8 +13,9 @@ def prompt(msg)
 end
 
 # displays the board
-def display_board(brd)
+def display_board(brd, score)
   system 'clear'
+  display_score(score)
   puts "You are a #{PLAYER_MARKER}. Computer is a #{COMPUTER_MARKER}"
   puts ""
   puts "     |       |"
@@ -68,6 +69,7 @@ def board_full?(brd)
 end
 
 def someone_won?(brd)
+  #bang bang will return a boolean value if no string is returned
   !!detect_winner(brd)
 end
 
@@ -91,29 +93,37 @@ def detect_winner(brd)
   nil
 end
 
+def display_score(score)
+  score.each {|key, value| puts "#{key} is #{value}"}
+end
+
 loop do
-  board = intialize_board
+  game_score = {"Player Score"=>0, "Computer Score"=>0}
 
-  loop do
-    display_board(board)
+    loop do
+      board = intialize_board
 
-    player_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
+      loop do
+        display_board(board, game_score)
 
-    computer_places_piece!(board)
-    break if someone_won?(board) || board_full?(board)
-  end
+        player_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
 
-  display_board(board)
+        computer_places_piece!(board)
+        break if someone_won?(board) || board_full?(board)
+      end
 
-  if someone_won?(board)
-    prompt "#{detect_winner(board)} won!"
-  else
-    prompt "Its a tie!"
-  end
+      display_board(board, game_score)
 
-  prompt "Play again? (y or n)"
-  answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+      if someone_won?(board)
+        prompt "#{detect_winner(board)} won!"
+      else
+        prompt "Its a tie!"
+      end
+
+      prompt "Play again? (y or n)"
+      answer = gets.chomp
+      break unless answer.downcase.start_with?('y')
+    end
 end
 prompt "Thanks for playing!"

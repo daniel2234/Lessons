@@ -97,15 +97,27 @@ def display_score(score)
   score.each {|key, value| puts "#{key} is #{value}"}
 end
 
+def game_score(winner, score)
+  if winner == "Player"
+    score["Player Score"] += 1
+  else winner == "Computer"
+    score["Computer Score"] += 1
+  end
+end
+
+def game_winner?(score, score_winning)
+  score["Player Score"] == score_winning || score["Computer Score"] == score_winning
+end
+
 loop do
   game_score = {"Player Score"=>0, "Computer Score"=>0}
-
+  winning_score = 5
     loop do
       board = intialize_board
 
       loop do
         display_board(board, game_score)
-
+  
         player_places_piece!(board)
         break if someone_won?(board) || board_full?(board)
 
@@ -114,6 +126,7 @@ loop do
       end
 
       display_board(board, game_score)
+      game_score(detect_winner(board), game_score)
 
       if someone_won?(board)
         prompt "#{detect_winner(board)} won!"
@@ -125,5 +138,6 @@ loop do
       answer = gets.chomp
       break unless answer.downcase.start_with?('y')
     end
+    break if game_winner(game_score, winning_score)
 end
 prompt "Thanks for playing!"

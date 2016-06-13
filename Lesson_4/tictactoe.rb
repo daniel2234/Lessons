@@ -60,7 +60,24 @@ def player_places_piece!(brd)
 end
 
 def computer_places_piece!(brd)
+  square = nil
+  #defense
+  WINNING_LINES.each do |line|
+    square = find_a_square_at_risk(line, brd, PLAYER_MARKER)
+    break if square
+  end
+
+  if !square
+      WINNING_LINES.each do |line|
+      square = find_a_square_at_risk(line, brd, COMPUTER_MARKER)
+      break if square
+    end
+  end
+
+  if !square
   square = empty_squares(brd).sample
+  end
+
   brd[square] = COMPUTER_MARKER
 end
 
@@ -101,7 +118,13 @@ def game_winner?(score, score_winning)
   score["Computer Score"] == score_winning
 end
 
-
+def find_a_square_at_risk(line, brd, marker)
+  if brd.values_at(*line).count(marker) == 2
+    brd.select{|k,v| line.include?(k) && v == INITIAL_MARKER}.keys.first
+  else
+    nil
+  end
+end
 
 loop do
   game_score = {"Player Score"=>0, "Computer Score"=>0}

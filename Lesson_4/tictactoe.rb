@@ -75,15 +75,6 @@ end
 
 def detect_winner(brd)
     WINNING_LINES.each do |line|
-    # if brd[line[0]] == PLAYER_MARKER &&
-    #    brd[line[1]] == PLAYER_MARKER &&
-    #    brd[line[2]] == PLAYER_MARKER
-    #   return 'Player'
-    # elsif brd[line[0]] == COMPUTER_MARKER &&
-    #       brd[line[1]] == COMPUTER_MARKER &&
-    #       brd[line[2]] == COMPUTER_MARKER
-    #   return 'Computer'
-    # end
      if brd.values_at(*line).count(PLAYER_MARKER) == 3
       return 'Player'
      elsif brd.values_at(*line).count(COMPUTER_MARKER) == 3
@@ -106,8 +97,11 @@ def game_score(winner, score)
 end
 
 def game_winner?(score, score_winning)
-  score["Player Score"] == score_winning || score["Computer Score"] == score_winning
+  score["Player Score"] == score_winning || 
+  score["Computer Score"] == score_winning
 end
+
+
 
 loop do
   game_score = {"Player Score"=>0, "Computer Score"=>0}
@@ -138,6 +132,6 @@ loop do
       answer = gets.chomp
       break unless answer.downcase.start_with?('y')
     end
-    break if game_winner(game_score, winning_score)
+    break if game_winner?(game_score, winning_score)      
 end
 prompt "Thanks for playing!"
